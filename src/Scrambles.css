@@ -1,0 +1,14 @@
+.scramble{
+    border: 2px solid black;
+    height: 3em;
+    width: 50%;
+    color: white;
+}
+
+.scramble:hover{
+    border: 2px solid rgb(131, 65, 65);
+}
+
+.scramble:active{
+    border: 2px solid white;
+}

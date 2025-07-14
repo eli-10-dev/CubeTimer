@@ -1,38 +1,65 @@
-.App {
-  text-align: center;
+ :root{
+    --background-color: white;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.body{
+    display: flex;
+    flex-direction: column;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.app-header{
+    border: 1px solid black;
+    background-color: rgba(129,129,129,255);
+    color: white;
+    width: 100%;
+    height: 12vh;
 }
 
-.App-link {
-  color: #61dafb;
+.time-content-container{
+    width: 100%;
+    height: 88vh;
+    display: flex;
+    flex-direction: row;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.time-display-container{
+    border: 1px solid black;
+    background-color: rgba(211,211,211,255);
+    width: 80%;
+    height: 100%;
+}
+
+.time-table-container{
+    border: 1px solid black;
+    background-color: rgba(163,158,158,255);
+    width: 20%;
+    height: 100%;
+}
+
+@media screen and (max-width: 600px){
+    .app-header{
+        width: 100%;
+        height: 15vh;
+    }
+
+    .time-content-container{
+        flex-direction: column;
+        height: 85vh;
+    }
+
+    .time-display-container{
+        width: 100%;
+        height: 65%;
+    }
+
+    .time-table-container{
+        width: 100%;
+        height: 35%;
+    }
 }
