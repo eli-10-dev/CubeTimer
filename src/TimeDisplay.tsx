@@ -2,15 +2,15 @@ import './TimeDisplay.css';
 
 type TimeDisplayProps = {
     // <prop name> : (<parameters>: <parameter types>) => <return type>
-    timer: number;
+    time: number;
     isSpacePressed: boolean;
 }
 
-function TimeDisplay({ timer, isSpacePressed }: TimeDisplayProps) {
+function TimeDisplay({ time, isSpacePressed }: TimeDisplayProps) {
     return(
         <div className="timer-container flex-center">
             <div className="timer" style={{ color:  isSpacePressed ? "green" : "black" }}>
-                {timer.toFixed(2).toString()}
+                {time.toFixed(2).toString()}
             </div>
 
             <div className="average">
