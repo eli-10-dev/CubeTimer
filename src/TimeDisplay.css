@@ -1,0 +1,13 @@
+.timer-container{
+    width: 50%;
+    height: auto;
+    flex-direction: column;
+}
+
+.timer{
+    font-size: 10em;
+}
+
+.average{
+    font-size: 3em;
+}

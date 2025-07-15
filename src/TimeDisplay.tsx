@@ -1,21 +1,23 @@
 import './TimeDisplay.css';
 
 type TimeDisplayProps = {
-    timer: Number;
+    // <prop name> : (<parameters>: <parameter types>) => <return type>
+    timer: number;
+    isSpacePressed: boolean;
 }
 
-function TimeDisplay({ timer }: TimeDisplayProps) {
+function TimeDisplay({ timer, isSpacePressed }: TimeDisplayProps) {
     return(
-        <div>
-            <div className="timer">
-                {timer.toString()}
+        <div className="timer-container flex-center">
+            <div className="timer" style={{ color:  isSpacePressed ? "green" : "black" }}>
+                {timer.toFixed(2).toString()}
             </div>
 
-            <div className="average-of-5">
+            <div className="average">
                 ao5: 
             </div>
             
-            <div className="average-of-12">
+            <div className="average">
                 ao12: 
             </div>
         </div>
