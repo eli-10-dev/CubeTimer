@@ -26,6 +26,7 @@ function App() {
   // Added to track if spacebar is being pressed for the time style
   const [isSpacePressed, setIsSpacePressed] = useState<boolean>(false);
 
+  // For cube scramble
   const notationsArray: Array<string> = ["F", "B", "U", "D", "R", "L"];
   const typeOfTurn : Record<number, string> = { 1: "", 2: "2", 3: "'"};
 
@@ -62,8 +63,7 @@ function App() {
   };
 
   const recordTime = () => {
-    console.log("Record function was called!");
-    console.log("Recording time: ", time);
+    // console.log("Record function was called!");
 
     let newSolve = {
       time,
@@ -74,8 +74,24 @@ function App() {
     setSolvesArray((prevSolves) => [...prevSolves, newSolve]);
   };
 
+  const calculateAo5 = (array : Solve[]) => {
+
+    if (array.length < 5){
+      setAo5("-");
+      return;
+    }
+    
+    const newArray = array.slice(array.length - 5);
+    const trimmed = [...newArray].sort((a: Solve, b: Solve) => a.time - b.time).slice(1, 4);
+    const sum = trimmed.reduce((sum, currentValue) => sum + currentValue.time, 0);
+    const average = (sum / 3).toString();
+    setAo5(average);
+  }
+
+  // Spacebar interactions
   const spacebarPress = (event: KeyboardEvent) => {
     if (event.key === ' '){
+      // console.log("Spacebar is pressed!");
       setIsSpacePressed(true);
     }
 
@@ -89,7 +105,7 @@ function App() {
 
   const spacebarRelease = (event: KeyboardEvent) => {
     if (event.key === ' '){
-      console.log("Spacebar is released!");
+      // console.log("Spacebar is released!");
       setIsSpacePressed(false);
 
       setIsTimerRunning((state: boolean) => {
@@ -111,20 +127,9 @@ function App() {
     if (!isSpacePressed && !isTimerRunning){
       recordTime();
     }
+
+    console.log("solvesArray: ", solvesArray);
   }, [isTimerRunning, isSpacePressed]);
-
-  // INITIAL RENDER
-  useEffect(() => {
-    generateScramble();
-    document.addEventListener('keydown', spacebarPress);
-    document.addEventListener('keyup', spacebarRelease);
-
-    return () => {
-      // Remove the event listeners so that the functions above will not run indefinitely
-      document.removeEventListener('keydown', spacebarPress);
-      document.removeEventListener('keyup', spacebarRelease);
-    }
-  }, []);
 
   // TIMER
   useEffect(() => {
@@ -139,6 +144,23 @@ function App() {
       return clearInterval(timerInterval);
     }
   }, [isTimerRunning])
+
+  useEffect(() => {
+    calculateAo5(solvesArray);
+  }, [solvesArray]);
+
+  // INITIAL RENDER
+  useEffect(() => {
+    generateScramble();
+    document.addEventListener('keydown', spacebarPress);
+    document.addEventListener('keyup', spacebarRelease);
+
+    return () => {
+      // Remove the event listeners so that the functions above will not run indefinitely
+      document.removeEventListener('keydown', spacebarPress);
+      document.removeEventListener('keyup', spacebarRelease);
+    }
+  }, []);
 
   return (
     <div className="body">
@@ -159,6 +181,9 @@ function App() {
         <section className="time-table-container flex-center">
           <TimeTable 
           solvesArray={solvesArray}
+          ao5={ao5}
+          ao12={ao12}
+          calculateAo5={calculateAo5}
           />
         </section>        
       </section>

@@ -3,15 +3,18 @@ import './TimeTable.css';
 
 type Solve = {
     time: number;
-     ao5: string;
+    ao5: string;
     ao12: string;
 }
 
 type TimeTableProps = {
     solvesArray: Solve[];
+    ao5: string;
+    ao12: string;
+    calculateAo5: (array: Solve[]) => void;
 }
 
-function TimeTable({ solvesArray }: TimeTableProps) {
+function TimeTable({ solvesArray, calculateAo5 }: TimeTableProps) {
     return(
         <div className="time-table-contents flex-center">
             {/* <section className="session-dropdown flex-center">
