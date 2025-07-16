@@ -15,9 +15,12 @@ type Solve = {
 
 function App() {
   // Prevents record() on initial render
-  const mountFrequency = useRef(0);
+  const [hasStarted, setHasStarted] = useState(false);
   const [cubeScramble, setCubeScramble] = useState<Array<string>>();
-  const [solvesArray, setSolvesArray] = useState<Solve[]>([]);
+  const [solvesArray, setSolvesArray] = useState<Solve[]>(() => {
+    const stored = localStorage.getItem("solvesStorage");
+    return stored ? JSON.parse(stored) : []
+  });
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const [time, setTime] = useState<number>(0);
   const [ao5, setAo5] = useState<string>("");
@@ -131,6 +134,10 @@ function App() {
     if (event.key === ' '){
       // console.log("Spacebar is pressed!");
       setIsSpacePressed(true);
+
+      if (!hasStarted) {
+        setHasStarted(true);
+      }
     }
 
     setIsTimerRunning((state: boolean) => {
@@ -156,12 +163,16 @@ function App() {
     }
   };
 
+  // Save SolvesArray to localStorage
+  useEffect(() => {
+    localStorage.setItem("solvesStorage", JSON.stringify(solvesArray));
+  }, [solvesArray]);
+
   // RECORDING TIME
   useEffect(() => {
-    if (mountFrequency.current < 1) {
-      mountFrequency.current += 1;
+    if (!hasStarted){
       return;
-    }
+    } 
 
     if (!isSpacePressed && !isTimerRunning){
       recordTime();
@@ -180,14 +191,13 @@ function App() {
     return () => {
       return clearInterval(timerInterval);
     }
-  }, [isTimerRunning])
+  }, [isTimerRunning]);
 
   // INITIAL RENDER
   useEffect(() => {
     generateScramble();
     document.addEventListener('keydown', spacebarPress);
     document.addEventListener('keyup', spacebarRelease);
-    setSolvesArray([]);
 
     return () => {
       // Remove the event listeners so that the functions above will not run indefinitely
