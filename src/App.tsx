@@ -18,7 +18,6 @@ function App() {
   const mountFrequency = useRef(0);
   const [cubeScramble, setCubeScramble] = useState<Array<string>>();
   const [solvesArray, setSolvesArray] = useState<Solve[]>([]);
-  const [recordReady, setRecordReady] = useState<boolean>(false);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const [time, setTime] = useState<number>(0);
   const [ao5, setAo5] = useState<string>("");
@@ -33,7 +32,7 @@ function App() {
   const generateScramble = () => {
     // Place array inside of the function so that a new reference 
     // is generated or a new instance of the array is seen by react.
-    console.log("Generate scramble function was called!");
+    // console.log("Generate scramble function was called!");
     const scrambleArray: string[] = new Array(20).fill("");
     let i = 0;
 
@@ -64,28 +63,67 @@ function App() {
 
   const recordTime = () => {
     // console.log("Record function was called!");
+    
+    // This idea is from AI to get 5 solves into the calculateAo5() function.
+    // Temporarily insert a placeholder solve with current time
+    const mockSolve = { time, ao5: "-", ao12: "-" };
+    const freshArray = [...solvesArray, mockSolve];
 
+    // Place ao5 inside of newSolve.ao5 before updating solvesArray(?)
+    // My idea was to calculate the ao5 using the currentState of solvesArray
+    // But still 4 solves are being used.
+    // const freshArray = [...solvesArray];
+    const newAo5 = calculateAo5(freshArray);
+    const newAo12 = calculateAo12(freshArray);
+  
     let newSolve = {
       time,
-      ao5,
-      ao12,
+      ao5: newAo5,
+      ao12: newAo12,
     };
 
-    setSolvesArray((prevSolves) => [...prevSolves, newSolve]);
+    const updatedArray = [...solvesArray, newSolve];
+    setSolvesArray(updatedArray);
+    setAo5(newAo5);
   };
 
-  const calculateAo5 = (array : Solve[]) => {
+  const calculateAo5 = (array: Solve[]) => {
+    let newArray: Solve[] = [];
 
     if (array.length < 5){
-      setAo5("-");
-      return;
+      newArray = [...array];
+      console.log(`New Array[${newArray.length}]: `, JSON.stringify(newArray, null, 1));
+      return "-"; 
     }
-    
-    const newArray = array.slice(array.length - 5);
-    const trimmed = [...newArray].sort((a: Solve, b: Solve) => a.time - b.time).slice(1, 4);
-    const sum = trimmed.reduce((sum, currentValue) => sum + currentValue.time, 0);
-    const average = (sum / 3).toString();
-    setAo5(average);
+
+    newArray = [...array];
+    console.log(`New Array[${newArray.length}]: `, JSON.stringify(newArray, null, 2));
+    const fiveSolves = newArray.slice(-5);
+    const middleTimes = [...fiveSolves].sort((a: Solve, b: Solve) => a.time - b.time).slice(1, 4);
+    const sum = middleTimes.reduce((sum, currentValue) => sum + currentValue.time, 0);
+    const average = (sum / 3).toFixed(3).toString();
+    console.log("Trimmed Array: ", JSON.stringify(middleTimes, null, 2));
+    console.log("Sum: ", sum);
+    console.log("Average: ", average);
+
+    return average;
+  }
+
+  const calculateAo12 = (array: Solve[]) => {
+    let newArray: Solve[] = [];
+
+    if (array.length < 12){
+      newArray = [...array];
+      return "-"; 
+    }
+
+    newArray = [...array];
+    const twelveSoles = newArray.slice(-12);
+    const middleTimes = [...twelveSoles].sort((a: Solve, b: Solve) => a.time - b.time).slice(1, 4);
+    const sum = middleTimes.reduce((sum, currentValue) => sum + currentValue.time, 0);
+    const average = (sum / 3).toFixed(3).toString();
+
+    return average;
   }
 
   // Spacebar interactions
@@ -118,8 +156,9 @@ function App() {
     }
   };
 
+  // RECORDING TIME
   useEffect(() => {
-    if (mountFrequency.current <= 1) {
+    if (mountFrequency.current < 1) {
       mountFrequency.current += 1;
       return;
     }
@@ -127,8 +166,6 @@ function App() {
     if (!isSpacePressed && !isTimerRunning){
       recordTime();
     }
-
-    console.log("solvesArray: ", solvesArray);
   }, [isTimerRunning, isSpacePressed]);
 
   // TIMER
@@ -145,15 +182,12 @@ function App() {
     }
   }, [isTimerRunning])
 
-  useEffect(() => {
-    calculateAo5(solvesArray);
-  }, [solvesArray]);
-
   // INITIAL RENDER
   useEffect(() => {
     generateScramble();
     document.addEventListener('keydown', spacebarPress);
     document.addEventListener('keyup', spacebarRelease);
+    setSolvesArray([]);
 
     return () => {
       // Remove the event listeners so that the functions above will not run indefinitely
@@ -184,6 +218,7 @@ function App() {
           ao5={ao5}
           ao12={ao12}
           calculateAo5={calculateAo5}
+          calculateAo12={calculateAo12}
           />
         </section>        
       </section>
