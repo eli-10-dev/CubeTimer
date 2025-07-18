@@ -11,11 +11,9 @@ type TimeTableProps = {
     solvesArray: Solve[];
     ao5: string;
     ao12: string;
-    calculateAo5: (array: Solve[]) => string;
-    calculateAo12: (array: Solve[]) => string;
 }
 
-function TimeTable({ solvesArray, calculateAo5 }: TimeTableProps) {
+function TimeTable({ solvesArray }: TimeTableProps) {
     return(
         <div className="time-table-contents flex-center">
             {/* <section className="session-dropdown flex-center">
