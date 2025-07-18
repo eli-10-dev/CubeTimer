@@ -13,5 +13,11 @@
 }
 
 @media screen and (max-width: 600px){
+    .timer{
+        font-size: 5em;
+    }
 
+    .average{
+        font-size: 1.5em;
+    }
 }

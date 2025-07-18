@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 // https://github.com/cubing/scramble-display
-// import { ScrambleDisplay  } from 'scramble-display';
+import { ScrambleDisplay  } from 'scramble-display';
 import Scrambles from './Scrambles';
 import TimeDisplay from './TimeDisplay';
 import TimeTable from './TimeTable';
-import { transpileModule } from 'typescript';
 
 type Solve = {
-    time: number;
-     ao5: string;
-    ao12: string;
+  time: number;
+  ao5: string;
+  ao12: string;
+}
+
+type Notation = {
+  notation: string;
+  opposite: string;
 }
 
 function App() {
@@ -29,31 +33,59 @@ function App() {
   const [isSpacePressed, setIsSpacePressed] = useState<boolean>(false);
 
   // For cube scramble
-  const notationsArray: Array<string> = ["F", "B", "U", "D", "R", "L"];
+  const notationsArray: Array<Notation> = [
+    { notation: "F", opposite: "B" }, 
+    { notation: "B", opposite: "F" }, 
+    { notation: "U", opposite: "D" }, 
+    { notation: "D", opposite: "U" }, 
+    { notation: "R", opposite: "L" }, 
+    { notation: "L", opposite: "R" }
+  ];
+
   const typeOfTurn : Record<number, string> = { 1: "", 2: "2", 3: "'"};
 
   const generateScramble = () => {
     // Place array inside of the function so that a new reference 
     // is generated or a new instance of the array is seen by react.
-    // console.log("Generate scramble function was called!");
     const scrambleArray: string[] = new Array(20).fill("");
     let i = 0;
 
+    // console.log(" ===== NEW SCRAMBLE GENERATED! NEW SCRAMBLE GENERATED! NEW SCRAMBLE GENERATED! ===== ");
     while (i < scrambleArray.length){
-      let generatedMove = "";
-      const notationType = notationsArray[Math.floor(Math.random() * 6)];
-      const turnType = typeOfTurn[Math.floor(Math.random() * 3 + 1)];
-      const prevMove = scrambleArray[i - 1];
-      // Bracket notation takes the [nth] character in a string
-      const prevNotation = prevMove?.[0];
+      // console.log("========== GENERATING NEW NOTATION ==========");
 
-      // Add condition for the case: R2 L2 R2. 
-      // Notation above is the same as doing L2 only.
-      if (notationType === prevNotation){
-        const noRepeatArray = notationsArray.filter(notation => notation !== prevNotation);
-        const noRepeatNotation = noRepeatArray[Math.floor(Math.random() * 5)];
+      let generatedMove = "";
+      const notationType = notationsArray[Math.floor(Math.random() * 6)].notation;
+      const notationTypeIndex = notationsArray.findIndex(move => move.notation === notationType);
+      const notationTypeOpposite = notationsArray[notationTypeIndex].opposite;
+      const turnType = typeOfTurn[Math.floor(Math.random() * 3 + 1)];
+
+      // Bracket notation takes the [nth] character in a string (prevNotation)
+      const prevMove = scrambleArray[i - 1];
+      const prevNotation = prevMove?.[0];
+      const doublePrevMove = scrambleArray[i - 2];
+      const doublePrevNotation = doublePrevMove?.[0];
+
+      if (notationType === doublePrevNotation){
+        const noRepeatArray = notationsArray.filter(move => move.notation !== doublePrevNotation);
+        const noRepeatNotation = noRepeatArray[Math.floor(Math.random() * 5)].notation;
         generatedMove = `${noRepeatNotation}${turnType}`;
-      } else {
+      }
+
+      if (notationTypeOpposite === prevNotation){
+        const noOppositeArray = notationsArray.filter(move => move.notation !== notationTypeOpposite && move.notation !== notationType);
+        const noOppositeNotation = noOppositeArray[Math.floor(Math.random() * 4)].notation;
+        generatedMove = `${noOppositeNotation}${turnType}`
+
+        // console.log(`Current notation: ${notationType}${turnType} opposite: ${notationTypeOpposite} prevMove: ${prevMove}`);
+        // console.log(`${notationTypeOpposite} === ${prevNotation}; New notation: ${generatedMove}`);
+        // console.log("noOppositeArray: ", noOppositeArray);
+      } else if (notationType === prevNotation){             
+        const noRepeatArray = notationsArray.filter(move => move.notation !== prevNotation);
+        const noRepeatNotation = noRepeatArray[Math.floor(Math.random() * 5)].notation;
+        generatedMove = `${noRepeatNotation}${turnType}`;
+      } 
+      else {
         generatedMove = `${notationType}${turnType}`;
       }
 
@@ -62,11 +94,10 @@ function App() {
     } 
 
     setCubeScramble(scrambleArray);
+    console.log("SCRAMBLE ARRAY: ", scrambleArray);
   };
 
   const recordTime = () => {
-    // console.log("Record function was called!");
-    
     // This idea is from AI to get 5 solves into the calculateAo5() function.
     // Temporarily insert a placeholder solve with current time
     const mockSolve = { time, ao5: "-", ao12: "-" };
@@ -88,6 +119,7 @@ function App() {
     const updatedArray = [...solvesArray, newSolve];
     setSolvesArray(updatedArray);
     setAo5(newAo5);
+    setAo12(newAo12);
   };
 
   const calculateAo5 = (array: Solve[]) => {
@@ -95,20 +127,20 @@ function App() {
 
     if (array.length < 5){
       newArray = [...array];
-      console.log(`New Array[${newArray.length}]: `, JSON.stringify(newArray, null, 1));
+      // console.log(`New Array[${newArray.length}]: `, JSON.stringify(newArray, null, 1));
       return "-"; 
     }
 
     newArray = [...array];
-    console.log(`New Array[${newArray.length}]: `, JSON.stringify(newArray, null, 2));
     const fiveSolves = newArray.slice(-5);
     const middleTimes = [...fiveSolves].sort((a: Solve, b: Solve) => a.time - b.time).slice(1, 4);
     const sum = middleTimes.reduce((sum, currentValue) => sum + currentValue.time, 0);
     const average = (sum / 3).toFixed(3).toString();
-    console.log("Trimmed Array: ", JSON.stringify(middleTimes, null, 2));
-    console.log("Sum: ", sum);
-    console.log("Average: ", average);
 
+    // console.log(`New Array[${newArray.length}]: `, JSON.stringify(newArray, null, 2));
+    // console.log("Trimmed Array: ", JSON.stringify(middleTimes, null, 2));
+    // console.log("Sum: ", sum);
+    // console.log("Average: ", average);
     return average;
   }
 
@@ -198,6 +230,12 @@ function App() {
     generateScramble();
     document.addEventListener('keydown', spacebarPress);
     document.addEventListener('keyup', spacebarRelease);
+    setAo5(() => {
+      return calculateAo5(solvesArray);
+    });
+    setAo12(() => {
+      return calculateAo12(solvesArray);
+    });
 
     return () => {
       // Remove the event listeners so that the functions above will not run indefinitely
@@ -219,6 +257,8 @@ function App() {
           <TimeDisplay 
           time={time}
           isSpacePressed={isSpacePressed}
+          ao5={ao5}
+          ao12={ao12}
           />
         </main>
 
