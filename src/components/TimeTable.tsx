@@ -1,19 +1,14 @@
 import { StringLiteral } from 'typescript';
 import './TimeTable.css';
-
-type Solve = {
-    time: number;
-    ao5: string;
-    ao12: string;
-}
+import { Solve } from '../types/types';
 
 type TimeTableProps = {
     solvesArray: Solve[];
-    ao5: string;
-    ao12: string;
+    setSelectedIndex: React.Dispatch<number>;
+    setShowStats: React.Dispatch<boolean>;
 }
 
-function TimeTable({ solvesArray }: TimeTableProps) {
+function TimeTable({ solvesArray, setSelectedIndex, setShowStats }: TimeTableProps) {
     return(
         <div className="time-table-contents flex-center">
             {/* <section className="session-dropdown flex-center">
@@ -41,7 +36,12 @@ function TimeTable({ solvesArray }: TimeTableProps) {
                     {/* solvesArray.length > 0 ?  */}
                     {
                     solvesArray.map(( {time, ao5, ao12}, index ) => (
-                        <tr key={index}>
+                        <tr key={index} 
+                            onClick={() => {
+                                        setSelectedIndex(Number(index));
+                                        setShowStats(true);
+                                    }}>
+
                             <td>{index + 1}</td>
                             <td>{time.toFixed(2)}</td>
                             <td>{ao5}</td>

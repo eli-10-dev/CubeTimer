@@ -1,0 +1,25 @@
+.status-display-container{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    /* border: 5px solid burlywood; */
+}
+
+.status-dispay-background{
+    height: 100%;
+    width: 100%;
+    background-color: rgba(142, 142, 142, 0.611);
+    z-index: 1;
+}
+
+.status-display-content{
+    position: absolute;
+    height: 70%;
+    width: 50%;
+    border: 5px solid blue;
+    background-color: gray;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
