@@ -29,17 +29,17 @@ function App() {
     return stored ? JSON.parse(stored) : []
   });
   const {time, setTime, isTimerRunning, setIsTimerRunning} = useTimer();
-  const [ao5, setAo5] = useState<string>("");
-  const [ao12, setAo12] = useState<string>("");
+  const [ao5, setAo5] = useState<string>(' ');
+  const [ao12, setAo12] = useState<string>(' ');
   // Added to track if spacebar is being pressed for the time style
   const [isSpacePressed, setIsSpacePressed] = useState<boolean>(false);
-  const [showStats, setShowStats] = useState<boolean>(false);
+  const [showSolve, setShowSolve] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex]= useState<number>(0);
 
   const recordTime = () => {
     // This idea is from AI to get 5 solves into the calculateAo5() function.
     // Temporarily insert a placeholder solve with current time
-    const mockSolve = { time, ao5: "-", ao12: "-", scramble: prevScramble };
+    const mockSolve = { time, ao5: "-", ao12: "-", scramble: prevScramble, addedTwo: false };
     const freshArray = [...solvesArray, mockSolve];
 
     // Place ao5 inside of newSolve.ao5 before updating solvesArray(?)
@@ -55,7 +55,8 @@ function App() {
       time,
       ao5: newAo5,
       ao12: newAo12,
-      scramble: prevScramble
+      scramble: prevScramble,
+      addedTwo: false
     };
 
     const updatedArray = [...solvesArray, newSolve];
@@ -104,11 +105,6 @@ function App() {
     }
   };
 
-  // Save SolvesArray to localStorage
-  useEffect(() => {
-    localStorage.setItem("solvesStorage", JSON.stringify(solvesArray));
-  }, [solvesArray]);
-
   // RECORDING TIME
   useEffect(() => {
     if (!hasStarted){
@@ -119,6 +115,11 @@ function App() {
       recordTime();
     }
   }, [isTimerRunning, isSpacePressed]);
+
+  // Save SolvesArray to localStorage
+  useEffect(() => {
+    localStorage.setItem("solvesStorage", JSON.stringify(solvesArray));
+  }, [solvesArray]);
 
   // INITIAL RENDER
   useEffect(() => {
@@ -148,10 +149,14 @@ function App() {
       </header> 
 
       {
-        showStats && 
+        showSolve && 
         <StatusDisplay
         solvesArray={solvesArray}
+        setSolvesArray={setSolvesArray}
         selectedIndex={selectedIndex}
+        setShowSolve={setShowSolve}
+        setAo5={setAo5}
+        setAo12={setAo12}
         />
       }
 
@@ -169,7 +174,7 @@ function App() {
           <TimeTable 
           solvesArray={solvesArray}
           setSelectedIndex={setSelectedIndex}
-          setShowStats={setShowStats}
+          setShowSolve={setShowSolve}
           />
         </section>        
       </section>

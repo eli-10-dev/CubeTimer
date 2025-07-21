@@ -16,10 +16,55 @@
     position: absolute;
     height: 70%;
     width: 50%;
-    border: 5px solid blue;
+    border: 5px solid rgb(61, 61, 61);
+    padding: 1.5em;
     background-color: gray;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 999;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.status-content-header{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.close-status-display{
+    font-size: 1.5em;
+}
+
+.close-status-display:hover{
+    cursor: pointer;
+    color: red;
+}
+.stats-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.stats-buttons p{
+    border: 2px solid rgb(61, 61, 61);
+    height: 100%;
+    min-width: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px){
+.status-display-content{
+    height: 50%;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 }

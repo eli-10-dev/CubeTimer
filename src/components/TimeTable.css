@@ -27,6 +27,10 @@ table{
     height: auto;
 }
 
+td{
+    cursor: pointer;
+}
+
 th, td{
     border: 2px solid black;
     min-width: 2em;

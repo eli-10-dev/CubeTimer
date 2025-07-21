@@ -18,7 +18,7 @@ function TimeDisplay({ time, isSpacePressed, ao5, ao12 }: TimeDisplayProps) {
             <div className="average">
                 ao5: {ao5 ? ao5 : "-"}
             </div>
-            
+             
             <div className="average">
                 ao12: {ao12 ? ao12 : "-"} 
             </div>
