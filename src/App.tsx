@@ -37,35 +37,30 @@ function App() {
   const [selectedIndex, setSelectedIndex]= useState<number>(0);
 
   const recordTime = () => {
-    // This idea is from AI to get 5 solves into the calculateAo5() function.
-    // Temporarily insert a placeholder solve with current time
-    const mockSolve = { time, ao5: "-", ao12: "-", scramble: prevScramble, addedTwo: false };
+    // This idea is from AI to get the 5th solves into the calculateAo5() function.
+    // Temporarily insert a placeholder solve with current time. I tried the same but without a mockSolve, only by adding the key of time in the newSolve object
+    const mockSolve = { time, ao5: "-", ao12: "-", scramble: prevScramble, addedTwo: false, dnf: false };
     const freshArray = [...solvesArray, mockSolve];
 
-    // Place ao5 inside of newSolve.ao5 before updating solvesArray(?)
-    // My idea was to calculate the ao5 using the currentState of solvesArray
-    // But still 4 solves are being used.
-    // const freshArray = [...solvesArray];
-
-    // const 
-    const newAo5 = calculateAo5(freshArray);
-    const newAo12 = calculateAo12(freshArray);
+    // Place ao5 inside of newSolve.ao5 before updating solvesArray
+    const newAo5:string = calculateAo5(freshArray);
+    const newAo12:string = calculateAo12(freshArray);
   
     let newSolve = {
       time,
       ao5: newAo5,
       ao12: newAo12,
       scramble: prevScramble,
-      addedTwo: false
+      addedTwo: false,
+      dnf: false
     };
 
     const updatedArray = [...solvesArray, newSolve];
     setSolvesArray(updatedArray);
     setAo5(newAo5);
     setAo12(newAo12);
-    console.log("Array: ", JSON.stringify(updatedArray, null, 2));
   };
-  
+
   // Spacebar interactions
   const spacebarPress = (event: KeyboardEvent) => {
     if (event.key === ' '){
@@ -119,6 +114,7 @@ function App() {
   // Save SolvesArray to localStorage
   useEffect(() => {
     localStorage.setItem("solvesStorage", JSON.stringify(solvesArray));
+    // console.log("solvesArray: ", JSON.stringify(solvesArray, null, 2));
   }, [solvesArray]);
 
   // INITIAL RENDER
@@ -126,12 +122,8 @@ function App() {
     setCubeScramble(generateScramble());  
     document.addEventListener('keydown', spacebarPress);
     document.addEventListener('keyup', spacebarRelease);
-    setAo5(() => {
-      return calculateAo5(solvesArray);
-    });
-    setAo12(() => {
-      return calculateAo12(solvesArray);
-    });
+    setAo5(calculateAo5(solvesArray));
+    setAo12(calculateAo12(solvesArray));
 
     return () => {
       // Remove the event listeners so that the functions above will not run indefinitely

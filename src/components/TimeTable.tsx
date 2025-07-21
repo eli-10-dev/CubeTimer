@@ -33,7 +33,7 @@ function TimeTable({ solvesArray, setSelectedIndex, setShowSolve }: TimeTablePro
             
                 <tbody>
                     {
-                    solvesArray.map(( {time, ao5, ao12, addedTwo}, index ) => (
+                    solvesArray.map(( {time, ao5, ao12, addedTwo, dnf}, index ) => (
                         <tr key={index}>
                             <td onClick={() => {
                                         setSelectedIndex(Number(index));
@@ -42,7 +42,7 @@ function TimeTable({ solvesArray, setSelectedIndex, setShowSolve }: TimeTablePro
                             <td onClick={() => {
                                         setSelectedIndex(Number(index));
                                         setShowSolve(true);
-                                    }}>{time.toFixed(2)}{!addedTwo ? "" : "+"}
+                                    }}>{dnf === true ? "DNF" : time.toFixed(2)}{!addedTwo ? "" : "+"}
                             </td>
                             <td>{ao5}</td>
                             <td>{ao12}</td>

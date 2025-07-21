@@ -4,6 +4,7 @@ export type Solve = {
   ao12: string;
   scramble: string[] | undefined;
   addedTwo: boolean;
+  dnf: boolean;
 };
 
 export type Notation = {

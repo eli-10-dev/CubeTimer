@@ -1,9 +1,6 @@
 import './StatusDisplay.css';
-import { useEffect } from 'react';
 import { Solve } from '../types/types';
-import { calculateAo5 } from '../utils/calculateAo5';
-import { calculateAo12 } from '../utils/calculateAo12';
-
+import { recalculateAllAverages } from '../utils/recalculateAllAverages';
 
 type StatusDisplayProps = {
     solvesArray: Solve[];
@@ -14,9 +11,10 @@ type StatusDisplayProps = {
     setAo12: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function StatusDisplay({ solvesArray, setSolvesArray, selectedIndex, setShowSolve, setAo5, setAo12 }: StatusDisplayProps) {
+function StatusDisplay({ solvesArray, setSolvesArray, selectedIndex, setShowSolve }: StatusDisplayProps) {
 
     const plusTwo = () => {
+        console.log("Plus Two Solve function called!");
         if (!solvesArray[selectedIndex].addedTwo) {
             const updatedSolve = {
                 // I made existingSolve because I iterated through each key in the object,
@@ -29,22 +27,38 @@ function StatusDisplay({ solvesArray, setSolvesArray, selectedIndex, setShowSolv
 
             const newArray = [...solvesArray];
             newArray[selectedIndex] = updatedSolve;
-            
-            const newAo5 = calculateAo5(newArray);
-            const newAo12 = calculateAo12(newArray);
-
-            setSolvesArray(newArray);
-            setAo5(newAo5);
-            setAo12(newAo12);
+    
+            const newAverages = recalculateAllAverages(newArray);
+            console.log("newAverages: ", newAverages);
+            setSolvesArray(newAverages);
+            setShowSolve(false);
         }
     };
 
     const deleteSolve = () => { 
-        setSolvesArray(prevArray => 
-            prevArray.filter((solve, index) => 
-                index !== selectedIndex
-            )
-        );
+        console.log("Delete Solve function called!");
+        const updatedArray = solvesArray.filter((_, index) => {
+            return index !== selectedIndex;
+        });
+        const newAverages = recalculateAllAverages(updatedArray);
+        setSolvesArray(newAverages);
+        setShowSolve(false);
+    };
+
+    const dnfSolve = () => {
+        if (!solvesArray[selectedIndex].dnf){
+            const updatedSolve = {
+                ...solvesArray[selectedIndex],
+                dnf: true
+            }
+
+            const newArray = [...solvesArray];
+            newArray[selectedIndex] = updatedSolve;
+
+            const newAverages = recalculateAllAverages(newArray);
+            setSolvesArray(newAverages);
+            setShowSolve(false);
+        }
     };
 
     return (
@@ -56,19 +70,16 @@ function StatusDisplay({ solvesArray, setSolvesArray, selectedIndex, setShowSolv
                                 setShowSolve(false);
                             }}> </i></div>
 
-                    <p>Solve No.: {selectedIndex}</p>
+                    <p>Solve No.: {selectedIndex + 1}</p>
                     <p>Time: {solvesArray[selectedIndex].time.toFixed(2)} {!solvesArray[selectedIndex].addedTwo ? "" : "+"}</p>
                     <p>scramble: {solvesArray[selectedIndex].scramble?.join(" ")}</p>
 
                     <span className="stats-buttons">
                         <p onClick={() => plusTwo()}> +2 </p>
 
-                        <p>DNF</p>
+                        <p onClick={() => dnfSolve()}>DNF</p>
 
-                        <p onClick={() => {
-                            deleteSolve()
-                            setShowSolve(false)
-                        }}>
+                        <p onClick={() => deleteSolve()}>
                             <i className="fa-solid fa-xmark"></i>
                         </p>
 
