@@ -11,13 +11,13 @@ export const calculateAo5 = (array: Solve[]) => {
   newArray = [...array];
   const fiveSolves = newArray.slice(-5);
   const removeDnf = fiveSolves.filter((solve) => solve.dnf !== true);
-  console.log("removeDnf: ", removeDnf);
+  //console.log("removeDnf: ", removeDnf);
   
   if (removeDnf.length <= 3){
     return "DNF";
   } else {
     const middleTimes = [...removeDnf].sort((a : Solve, b: Solve) => a.time - b.time).slice(1);
-    console.log("middleTimes.length: ", middleTimes.length);
+    //console.log("middleTimes.length: ", middleTimes.length);
     const sum = middleTimes.reduce((sum, currentValue) => sum + currentValue.time, 0);
     const average = (sum / middleTimes.length).toFixed(2).toString();
     return average;

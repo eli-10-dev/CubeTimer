@@ -4,15 +4,16 @@ import './App.css';
 
 // Components
 import Scrambles from './components/Scrambles';
-import StatusDisplay from './components/StatusDisplay';
 import TimeDisplay from './components/TimeDisplay';
 import TimeTable from './components/TimeTable';
+import StatusDisplay from './components/StatusDisplay';
+import AverageDisplay from './components/AverageDisplay';
 
 // hooks 
 import { useTimer } from './hooks/useTimer';
 
 // Types
-import { Solve, Notation } from './types/types';
+import { Solve, timesAndScrambles } from './types/types';
 
 // Utils
 import { calculateAo5 } from './utils/calculateAo5';
@@ -20,7 +21,7 @@ import { calculateAo12 } from './utils/calculateAo12';
 import { generateScramble } from './utils/generateScramble';
 
 function App() {
-  // Prevents record() on initial render
+  // Prevents record() on initial rendertimesAndScrambles
   const [hasStarted, setHasStarted] = useState(false);
   const [cubeScramble, setCubeScramble] = useState<Array<string>>();
   const [prevScramble, setPrevScramble] = useState<Array<string>>();
@@ -33,8 +34,11 @@ function App() {
   const [ao12, setAo12] = useState<string>(' ');
   // Added to track if spacebar is being pressed for the time style
   const [isSpacePressed, setIsSpacePressed] = useState<boolean>(false);
-  const [showSolve, setShowSolve] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex]= useState<number>(0);
+  const [showSolve, setShowSolve] = useState<boolean>(false);
+  const [showAverages, setShowAverages] = useState<boolean>(false);
+  const [selectedAo5, setSelectedAo5] = useState<string>("");
+  const [slicedArrayDisplay, setSlicedArrayDisplay] = useState<timesAndScrambles[]>([]);
 
   const recordTime = () => {
     // This idea is from AI to get the 5th solves into the calculateAo5() function.
@@ -59,6 +63,43 @@ function App() {
     setSolvesArray(updatedArray);
     setAo5(newAo5);
     setAo12(newAo12);
+  };
+
+  const indexSetting = (index: number): number => {
+    setSelectedIndex((prevIndex) => {
+      // console.log("index: ", index + 1);
+      return index;
+    });
+    return index;
+  };
+
+  const showAo5 = (index: number) => {
+
+    if (solvesArray[index].ao5 === "-"){
+      return;
+    } else {
+      const slicedArray = solvesArray.slice(index - 4, index + 1);
+      const sortedArray = slicedArray.sort((a: Solve, b: Solve) => a.time - b.time);
+      console.log("Sorted Array: ", sortedArray);    
+      console.log("Specific index's ao5: ", solvesArray[index].ao5);
+
+      const clickedAo5 = solvesArray[index].ao5.toString();
+      const timesAndScrambles = sortedArray.map((solve: Solve): { time: string, scramble: string } => {
+        return {
+          time: solve.time.toString(),
+          scramble: JSON.stringify(solve.scramble),
+        }
+      });
+
+      // console.log("typeof: ", typeof timesAndScrambles);
+      // console.log("Array.isArray(timesAndScrambles): ", Array.isArray(timesAndScrambles));
+      // console.log("timesAndScrambles: ", JSON.stringify(timesAndScrambles, null, 2));
+      
+      setSelectedAo5(clickedAo5);
+      setSlicedArrayDisplay(timesAndScrambles);
+      setShowAverages(true);
+      return timesAndScrambles;
+    }
   };
 
   // Spacebar interactions
@@ -152,6 +193,15 @@ function App() {
         />
       }
 
+      {
+        showAverages && 
+        <AverageDisplay
+        setShowAverages={setShowAverages}
+        slicedArrayDisplay={slicedArrayDisplay}
+        selectedAo5={selectedAo5}
+        />
+      }
+
       <section className="time-content-container">
         <main className="time-display-container flex-center">
           <TimeDisplay 
@@ -165,8 +215,11 @@ function App() {
         <section className="time-table-container flex-center">
           <TimeTable 
           solvesArray={solvesArray}
+          selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
           setShowSolve={setShowSolve}
+          indexSetting={indexSetting}
+          showAo5={showAo5}
           />
         </section>        
       </section>

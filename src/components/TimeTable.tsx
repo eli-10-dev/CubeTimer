@@ -3,11 +3,15 @@ import { Solve } from '../types/types';
 
 type TimeTableProps = {
     solvesArray: Solve[];
-    setSelectedIndex: React.Dispatch<number>;
+    selectedIndex: number;
+    setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
     setShowSolve: React.Dispatch<boolean>;
+    indexSetting: (selectedIndex: number) => number;
+    showAo5: (index: number) => void;
 }
 
-function TimeTable({ solvesArray, setSelectedIndex, setShowSolve }: TimeTableProps) {
+function TimeTable({ solvesArray, setShowSolve, indexSetting, showAo5 }: TimeTableProps) {
+
     return(
         <div className="time-table-contents flex-center">
             {/* <section className="session-dropdown flex-center">
@@ -36,15 +40,24 @@ function TimeTable({ solvesArray, setSelectedIndex, setShowSolve }: TimeTablePro
                     solvesArray.map(( {time, ao5, ao12, addedTwo, dnf}, index ) => (
                         <tr key={index}>
                             <td onClick={() => {
-                                        setSelectedIndex(Number(index));
+                                        const newIndex = indexSetting(index);
                                         setShowSolve(true);
-                                    }}>{index + 1}</td>
-                            <td onClick={() => {
-                                        setSelectedIndex(Number(index));
-                                        setShowSolve(true);
-                                    }}>{dnf === true ? "DNF" : time.toFixed(2)}{!addedTwo ? "" : "+"}
+                                    }}> {index + 1}
                             </td>
-                            <td>{ao5}</td>
+
+                            <td onClick={() => {
+                                        const newIndex = indexSetting(index);
+                                        setShowSolve(true);
+                                    }}> {dnf === true ? "DNF" : time.toFixed(2)}{!addedTwo ? "" : "+"}
+                            </td>
+
+                            <td onClick={() => {
+                                        const newIndex = indexSetting(index);
+                                        showAo5(newIndex);
+                                }}> {ao5}    
+                            
+                            </td>
+
                             <td>{ao12}</td>
                         </tr>
                     )) 

@@ -65,10 +65,13 @@ function StatusDisplay({ solvesArray, setSolvesArray, selectedIndex, setShowSolv
         <div className="status-display-container"> 
             <div className="status-dispay-background">  
                 <div className="status-display-content">
-                    <div className="status-content-header"><i className="fa-solid fa-xmark close-status-display" 
+                    <div className="status-content-header">
+                        <i className="fa-solid fa-xmark close-status-display" 
                         onClick={() => {
                                 setShowSolve(false);
-                            }}> </i></div>
+                            }}> 
+                        </i>
+                    </div>
 
                     <p>Solve No.: {selectedIndex + 1}</p>
                     <p>Time: {solvesArray[selectedIndex].time.toFixed(2)} {!solvesArray[selectedIndex].addedTwo ? "" : "+"}</p>

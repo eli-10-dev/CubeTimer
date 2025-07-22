@@ -1,18 +1,18 @@
-.status-display-container{
+.average-display-container{
     height: 100%;
     width: 100%;
     position: absolute;
     /* border: 5px solid burlywood; */
 }
 
-.status-dispay-background{
+.average-dispay-background{
     height: 100%;
     width: 100%;
     background-color: rgba(142, 142, 142, 0.611);
     z-index: 1;
 }
 
-.status-display-content{
+.average-display-content{
     position: absolute;
     height: 70%;
     width: 50%;
@@ -29,7 +29,7 @@
     gap: 1em;
 }
 
-.status-content-header{
+.average-content-header{
     display: flex;
     justify-content: flex-end;
 }
@@ -41,23 +41,6 @@
 .close-status-display:hover{
     cursor: pointer;
     color: red;
-}
-
-.stats-buttons{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1em;
-}
-
-.stats-buttons p{
-    border: 2px solid rgb(61, 61, 61);
-    height: 100%;
-    min-width: 3em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
 }
 
 @media screen and (max-width: 600px){
