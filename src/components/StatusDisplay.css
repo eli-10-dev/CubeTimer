@@ -2,7 +2,6 @@
     height: 100%;
     width: 100%;
     position: absolute;
-    /* border: 5px solid burlywood; */
 }
 
 .status-dispay-background{
@@ -61,11 +60,11 @@
 }
 
 @media screen and (max-width: 600px){
-.status-display-content{
-    height: 50%;
-    width: 80%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-}
+    .status-display-content{
+        height: 50%;
+        width: 80%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+} 

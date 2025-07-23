@@ -13,7 +13,7 @@ import AverageDisplay from './components/AverageDisplay';
 import { useTimer } from './hooks/useTimer';
 
 // Types
-import { Solve, timesAndScrambles } from './types/types';
+import { Solve, TypetimesAndScrambles } from './types/types';
 
 // Utils
 import { calculateAo5 } from './utils/calculateAo5';
@@ -37,8 +37,8 @@ function App() {
   const [selectedIndex, setSelectedIndex]= useState<number>(0);
   const [showSolve, setShowSolve] = useState<boolean>(false);
   const [showAverages, setShowAverages] = useState<boolean>(false);
-  const [selectedAo5, setSelectedAo5] = useState<string>("");
-  const [slicedArrayDisplay, setSlicedArrayDisplay] = useState<timesAndScrambles[]>([]);
+  const [selectedAverage, setSelectedAverage] = useState<string>("");
+  const [slicedArrayDisplay, setSlicedArrayDisplay] = useState<TypetimesAndScrambles[]>([]);
 
   const recordTime = () => {
     // This idea is from AI to get the 5th solves into the calculateAo5() function.
@@ -84,10 +84,11 @@ function App() {
       console.log("Specific index's ao5: ", solvesArray[index].ao5);
 
       const clickedAo5 = solvesArray[index].ao5.toString();
-      const timesAndScrambles = sortedArray.map((solve: Solve): { time: string, scramble: string } => {
+      const timesAndScrambles = sortedArray.map((solve: Solve): { time: string, scramble: string, dnf: boolean } => {
         return {
-          time: solve.time.toString(),
+          time: solve.time.toFixed(2).toString(),
           scramble: JSON.stringify(solve.scramble),
+          dnf: solve.dnf
         }
       });
 
@@ -95,7 +96,33 @@ function App() {
       // console.log("Array.isArray(timesAndScrambles): ", Array.isArray(timesAndScrambles));
       // console.log("timesAndScrambles: ", JSON.stringify(timesAndScrambles, null, 2));
       
-      setSelectedAo5(clickedAo5);
+      setSelectedAverage(clickedAo5);
+      setSlicedArrayDisplay(timesAndScrambles);
+      setShowAverages(true);
+      return timesAndScrambles;
+    }
+  };
+
+  const showAo12 = (index: number) => {
+
+    if (solvesArray[index].ao12 === "-"){
+      return;
+    } else {
+      const slicedArray = solvesArray.slice(index - 11, index + 1);
+      const sortedArray = slicedArray.sort((a: Solve, b: Solve) => a.time - b.time);
+      // console.log("Sorted Array: ", sortedArray);    
+      // console.log("Specific index's ao12: ", solvesArray[index].ao12);
+
+      const clickedAo12 = solvesArray[index].ao12.toString();
+      const timesAndScrambles = sortedArray.map((solve: Solve): { time: string, scramble: string, dnf: boolean } => {
+        return {
+          time: solve.time.toFixed(2).toString(),
+          scramble: JSON.stringify(solve.scramble),
+          dnf: solve.dnf
+        }
+      });
+
+      setSelectedAverage(clickedAo12);
       setSlicedArrayDisplay(timesAndScrambles);
       setShowAverages(true);
       return timesAndScrambles;
@@ -198,7 +225,7 @@ function App() {
         <AverageDisplay
         setShowAverages={setShowAverages}
         slicedArrayDisplay={slicedArrayDisplay}
-        selectedAo5={selectedAo5}
+        selectedAverage={selectedAverage}
         />
       }
 
@@ -220,6 +247,7 @@ function App() {
           setShowSolve={setShowSolve}
           indexSetting={indexSetting}
           showAo5={showAo5}
+          showAo12={showAo12}
           />
         </section>        
       </section>

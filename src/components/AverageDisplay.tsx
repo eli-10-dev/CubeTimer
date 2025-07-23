@@ -1,20 +1,20 @@
 import './AverageDisplay.css';
 import React from "react";
-import { timesAndScrambles } from '../types/types';
+import { TypetimesAndScrambles } from '../types/types';
 
 type AverageDisplayProps = {
     setShowAverages: React.Dispatch<boolean>;
-    slicedArrayDisplay: timesAndScrambles[];
-    selectedAo5: string;
+    slicedArrayDisplay: TypetimesAndScrambles[];
+    selectedAverage: string;
 }
 
-function AverageDisplay({ setShowAverages, slicedArrayDisplay, selectedAo5 }: AverageDisplayProps) {
+function AverageDisplay({ setShowAverages, slicedArrayDisplay, selectedAverage }: AverageDisplayProps) {
 
     const regex = /[\[\]",]/g;
 
     return (
         <div className="average-display-container"> 
-            <div className="average-dispay-background">  
+            <div className="average-display-background">  
                 <div className="average-display-content">
                     <div className="average-content-header">
                         <i className="fa-solid fa-xmark close-status-display" 
@@ -23,13 +23,14 @@ function AverageDisplay({ setShowAverages, slicedArrayDisplay, selectedAo5 }: Av
                                 }}> 
                         </i>
                     </div>
-                    <div>
 
-                        <p>Ao5: {selectedAo5}</p>
+                    <div className="average-stats">
+
+                        <p>Average: {selectedAverage}</p>
                     {
-                    slicedArrayDisplay.map(( { time, scramble}, index) => (
-                        <div>
-                            <p>{index + 1}. {time}</p>
+                    slicedArrayDisplay.map(( { time, scramble, dnf}, index) => (
+                        <div className="solvetime-scramble">
+                            <span><p>{index + 1}.</p> <p>{!dnf ? time : `DNF(${time})`}</p></span>
                             <p>{scramble.replace(regex, " ")}</p>
                         </div>
                     ))

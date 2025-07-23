@@ -2,17 +2,16 @@
     height: 100%;
     width: 100%;
     position: absolute;
-    /* border: 5px solid burlywood; */
 }
 
-.average-dispay-background{
+.average-display-background{
     height: 100%;
     width: 100%;
     background-color: rgba(142, 142, 142, 0.611);
     z-index: 1;
 }
 
-.average-display-content{
+.average-display-content{   
     position: absolute;
     height: 70%;
     width: 50%;
@@ -24,14 +23,33 @@
     transform: translate(-50%, -50%);
     z-index: 999;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
-    gap: 1em;
+    gap: 0;
 }
 
 .average-content-header{
     display: flex;
     justify-content: flex-end;
+    width: 100%;
+    border: 3px solid blue;
+    height: 2em;
+    margin: 0;
+}
+
+.average-stats{
+    border: 2px solid red;
+    margin-top: -4em;
+}
+
+.solvetime-scramble{
+    display: flex;
+    gap: 3em;
+}
+
+.solvetime-scramble span{
+    display: inherit;
+    flex-direction: row;
 }
 
 .close-status-display{
@@ -44,11 +62,11 @@
 }
 
 @media screen and (max-width: 600px){
-.status-display-content{
-    height: 50%;
-    width: 80%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-}
+    .status-display-content{
+        height: 50%;
+        width: 80%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+} 

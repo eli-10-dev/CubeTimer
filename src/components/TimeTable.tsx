@@ -8,9 +8,10 @@ type TimeTableProps = {
     setShowSolve: React.Dispatch<boolean>;
     indexSetting: (selectedIndex: number) => number;
     showAo5: (index: number) => void;
+    showAo12: (index: number) => void;
 }
 
-function TimeTable({ solvesArray, setShowSolve, indexSetting, showAo5 }: TimeTableProps) {
+function TimeTable({ solvesArray, setShowSolve, indexSetting, showAo5, showAo12 }: TimeTableProps) {
 
     return(
         <div className="time-table-contents flex-center">
@@ -58,7 +59,11 @@ function TimeTable({ solvesArray, setShowSolve, indexSetting, showAo5 }: TimeTab
                             
                             </td>
 
-                            <td>{ao12}</td>
+                            <td onClick={() => {
+                                        const newIndex = indexSetting(index);
+                                        showAo12(newIndex);
+                                }}>{ao12}
+                            </td>
                         </tr>
                     )) 
                     }

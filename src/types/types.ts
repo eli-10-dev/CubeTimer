@@ -12,7 +12,8 @@ export type Notation = {
   opposite: string
 }
 
-export type timesAndScrambles = {
+export type TypetimesAndScrambles = {
   time: string,
   scramble: string
+  dnf: boolean
 }

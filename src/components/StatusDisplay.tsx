@@ -74,7 +74,7 @@ function StatusDisplay({ solvesArray, setSolvesArray, selectedIndex, setShowSolv
                     </div>
 
                     <p>Solve No.: {selectedIndex + 1}</p>
-                    <p>Time: {solvesArray[selectedIndex].time.toFixed(2)} {!solvesArray[selectedIndex].addedTwo ? "" : "+"}</p>
+                    <p>Time: {!solvesArray[selectedIndex].dnf ? solvesArray[selectedIndex].time.toFixed(2) : `DNF(${solvesArray[selectedIndex].time.toFixed(2)})`} {!solvesArray[selectedIndex].addedTwo ? "" : "+"}</p>
                     <p>scramble: {solvesArray[selectedIndex].scramble?.join(" ")}</p>
 
                     <span className="stats-buttons">
