@@ -15,9 +15,9 @@ export const calculateAo12 = (array: Solve[]) => {
   if (removeDnf.length <= 10){
     return "DNF";
   } else {
-    const middleTimes = [...removeDnf].sort((a : Solve, b: Solve) => a.time - b.time).slice(1);
+    const middleTimes = [...removeDnf].sort((a : Solve, b: Solve) => a.time - b.time).slice(1, 11);
     const sum = middleTimes.reduce((sum, currentValue) => sum + currentValue.time, 0);
-    const average = (sum / middleTimes.length).toFixed(2).toString();
+    const average = (sum / 10).toFixed(2).toString();
     return average;
   }
 }

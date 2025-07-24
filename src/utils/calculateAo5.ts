@@ -16,10 +16,10 @@ export const calculateAo5 = (array: Solve[]) => {
   if (removeDnf.length <= 3){
     return "DNF";
   } else {
-    const middleTimes = [...removeDnf].sort((a : Solve, b: Solve) => a.time - b.time).slice(1);
+    const middleTimes = [...removeDnf].sort((a : Solve, b: Solve) => a.time - b.time).slice(1, 4);
     //console.log("middleTimes.length: ", middleTimes.length);
     const sum = middleTimes.reduce((sum, currentValue) => sum + currentValue.time, 0);
-    const average = (sum / middleTimes.length).toFixed(2).toString();
+    const average = (sum / 3).toFixed(2).toString();
     return average;
   }
   // console.log(`New Array[${newArray.length}]: `, JSON.stringify(newArray, null, 2));
