@@ -43,26 +43,37 @@ function TimeTable({ solvesArray, setShowSolve, indexSetting, showAo5, showAo12 
                             <td onClick={() => {
                                         const newIndex = indexSetting(index);
                                         setShowSolve(true);
-                                    }}> {index + 1}
+                                    }}
+                                className="index-solve-time"
+                                    > {index + 1}
                             </td>
 
                             <td onClick={() => {
                                         const newIndex = indexSetting(index);
                                         setShowSolve(true);
-                                    }}> {dnf === true ? "DNF" : time.toFixed(2)}{!addedTwo ? "" : "+"}
+                                    }}
+                                className="index-solve-time"
+                                    > {dnf === true ? "DNF" : time.toFixed(2)}{!addedTwo ? "" : "+"}
+                                
                             </td>
 
                             <td onClick={() => {
                                         const newIndex = indexSetting(index);
                                         showAo5(newIndex);
-                                }}> {ao5}    
-                            
+                                }}
+                                style={{ cursor:`${ao5 === "-" ? "default" : "pointer"}`}}
+                                className={ao5 === "-" ? "" : "td-hover"}
+                                > {ao5}    
+                
                             </td>
 
                             <td onClick={() => {
                                         const newIndex = indexSetting(index);
                                         showAo12(newIndex);
-                                }}>{ao12}
+                                }}
+                                style={{ cursor:`${ao12 === "-" ? "default" : "pointer"}`}}
+                                className={ao12 === "-" ? "" : "td-hover"}
+                                >{ao12}
                             </td>
                         </tr>
                     )) 

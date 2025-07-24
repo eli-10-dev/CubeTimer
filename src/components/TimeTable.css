@@ -25,10 +25,7 @@ table{
     /* border: 2px solid green; */
     width: 100%;
     height: auto;
-}
-
-td{
-    cursor: pointer;
+    border-radius: 3px;    
 }
 
 th, td{
@@ -38,8 +35,17 @@ th, td{
     min-height: 1em;
     height: 1.5em;
     text-align: center;
+    border-radius: 3px;  
 }
 
-@media screen and (max-width: 600px){
+.index-solve-time{
+    cursor: pointer;
+}
 
+.td-hover{
+    background-color: var(--color-orange);
+}
+
+.td-hover:hover, .index-solve-time:hover {
+    background-color: rgb(141, 90, 67);
 }

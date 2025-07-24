@@ -26,11 +26,12 @@ function AverageDisplay({ setShowAverages, slicedArrayDisplay, selectedAverage }
 
                     <div className="average-stats">
 
-                        <p>Average: {selectedAverage}</p>
+                        <p className="average-stats-ave">Average: {selectedAverage}</p>
                     {
                     slicedArrayDisplay.map(( { time, scramble, dnf}, index) => (
                         <div className="solvetime-scramble">
-                            <span><p>{index + 1}.</p> <p>{!dnf ? time : `DNF(${time})`}</p></span>
+                            <span><p>{index + 1}.
+                            </p> <p>{!dnf ? time : `DNF(${time})`}</p></span>
                             <p>{scramble.replace(regex, " ")}</p>
                         </div>
                     ))
